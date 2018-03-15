@@ -7,10 +7,8 @@ import scala.concurrent.Future
 
 import play.api.libs.ws.ahc._
 import play.api.libs.json._
-import play.api.libs.ws.{BodyWritable, InMemoryBody, StandaloneWSResponse}
+import play.api.libs.ws.{BodyWritable, InMemoryBody}
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import akka.util.ByteString
 
 final class RequestHandler(
@@ -50,7 +48,11 @@ final class RequestHandler(
       (camelToUnderscore(name), unwrapToJson(value))
     }.filterNot{ p => p._2 == JsString("None") && p._1 == "method_name"}.toSeq
 
-  def apply(req: ApiRequest): Future[StandaloneWSResponse] = {
+  def apply(req: ApiRequest): Future[JsValue] = {
+    import akka.actor.ActorSystem
+    import akka.stream.ActorMaterializer
+    import scala.concurrent.ExecutionContext.Implicits.global
+
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
 
@@ -72,10 +74,13 @@ final class RequestHandler(
 
     req match {
       case r: ApiRequestQS =>
-        ws.addQueryStringParameters(fieldsToKVStringSeq(r): _*).get()
+        ws.addQueryStringParameters(fieldsToKVStringSeq(r): _*)
+          .get() map { response => Json.parse(response.body)}
 
       case r: ApiRequestJson =>
-        ws.post(Json.obj(fieldsToKVJsonSeq(r): _*))
+        ws.post(Json.obj(fieldsToKVJsonSeq(r): _*)) map { response =>
+          Json.parse(response.body)
+        }
     }
   }
 }
