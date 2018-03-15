@@ -1,5 +1,6 @@
 package vk.basic
 
+import play.api.libs.json.{JsPath, Reads}
 import vk.media.VkMedia
 
 /**
@@ -16,8 +17,21 @@ import vk.media.VkMedia
 final case class VkWallPost(
                           id: Int,
                           fromId: Int,
-                          createdBy: Int,
+                          createdBy: Option[Int],
                           date: Int,
                           text: String,
-                          attachments: Option[Seq[VkMedia]]
+                          attachments: Seq[VkMedia]
                          )
+
+object VkWallPost {
+  import vk.media.VkMedia
+
+  implicit val vkWallPostReads: Reads[VkWallPost] = for {
+    id <- (JsPath \ "id").read[Int]
+    fromId <- (JsPath \ "from_id").read[Int]
+    createdBy <- (JsPath \ "created_by").readNullable[Int]
+    date <- (JsPath \ "date").read[Int]
+    text <- (JsPath \ "text").read[String]
+    attachments <- (JsPath \ "attachments").read[Seq[VkMedia]]
+  } yield VkWallPost(id, fromId, createdBy, date, text, attachments)
+}
