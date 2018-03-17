@@ -3,15 +3,15 @@ package vk.media
 /**
   * Represents (not all) fields of Vk `Video` object
   *
-  * @param id video identifier
-  * @param title owner identifier
-  * @param description description
-  * @param duration duration
+  * @param id          `Int` video identifier
+  * @param title       `String` owner identifier
+  * @param description `String` description
+  * @param duration    `Int` duration
   * @param photo_130 `Optional String` of the image of the movie cover with a size of 130x98
   * @param photo_320 `Optional String` of the image of the movie cover with a size of 320x240
   * @param photo_640 `Optional String` of the image of the movie cover with a size of 640x480
   * @param photo_800 `Optional String` of the image of the movie cover with a size of 800x450
-  * @param date date (in Unixtime) the video has been added
+  * @param date date `Int` (in Unixtime) the video has been added
   */
 final case class VkVideo(
                            id: Int,
@@ -24,8 +24,7 @@ final case class VkVideo(
                            photo_800: Option[String],
                            photo_1280: Option[String],
                            photo_2560: Option[String],
-                           date: Int,
-                           mediaType: String = "video"
+                           date: Int
                          ) extends VkMedia
 
 object VkVideo {
@@ -43,7 +42,6 @@ object VkVideo {
     (JsPath \ "photo_800").readNullable[String] and
     (JsPath \ "photo_1280").readNullable[String] and
     (JsPath \ "photo_2560").readNullable[String] and
-    (JsPath \ "date").read[Int] and
-    (JsPath \ "type").read[String]
+    (JsPath \ "date").read[Int]
   )(VkVideo.apply _)
 }

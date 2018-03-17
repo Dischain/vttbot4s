@@ -6,18 +6,18 @@ import vk.media.VkMedia
 /**
   * Describes fields (not all) of the post on the wall
   *
-  * @param id post identifier on the wall
-  * @param fromId author identifier
-  * @param createdBy administrator identifier who posted the post
-  * @param date date (in Unixtime) the post has been added
-  * @param text post text
-  * @param attachments information about attachments to the post (photos,
+  * @param id          `Int` post identifier on the wall
+  * @param from_id     `Int` author identifier
+  * @param created_by  `Optional Int` administrator identifier who posted the post
+  * @param date        `Int` date (in Unixtime) the post has been added
+  * @param text        `String` post text
+  * @param attachments `Seq[VkMedia]` information about attachments to the post (photos,
   *                    links, etc.), if any
   */
 final case class VkWallPost(
                           id: Int,
-                          fromId: Int,
-                          createdBy: Option[Int],
+                          from_id: Int,
+                          created_by: Option[Int],
                           date: Int,
                           text: String,
                           attachments: Seq[VkMedia]

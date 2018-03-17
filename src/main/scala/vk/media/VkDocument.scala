@@ -1,14 +1,14 @@
 package vk.media
 
 /**
-  * Represents (not all) fields of Vk `Object` object
+  * Represents (not all) fields of Vk `Document` object
   *
-  * @param id document identifier
-  * @param title document title
-  * @param size document size in Bytes
-  * @param ext document extension
-  * @param url loadable url
-  * @param date date (in Unixtime) the document has been added
+  * @param id    `Int` document identifier
+  * @param title `String` document title
+  * @param size  `Int` document size in Bytes
+  * @param ext   `String` document extension
+  * @param url   `String` loadable url
+  * @param date  `Int` date (in Unixtime) the document has been added
   */
 final case class VkDocument(
                            id: Int,
@@ -16,8 +16,7 @@ final case class VkDocument(
                            size: Int,
                            ext: String,
                            url: String,
-                           date: Int,
-                           mediaType: String = "document"
+                           date: Int
                            ) extends VkMedia
 
 object VkDocument {
@@ -30,7 +29,6 @@ object VkDocument {
     (JsPath \ "size").read[Int] and
     (JsPath \ "ext").read[String] and
     (JsPath \ "url").read[String] and
-    (JsPath \ "date").read[Int] and
-    (JsPath \ "type").read[String]
+    (JsPath \ "date").read[Int]
   )(VkDocument.apply _)
 }
