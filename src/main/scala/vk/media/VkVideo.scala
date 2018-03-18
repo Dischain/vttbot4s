@@ -15,6 +15,7 @@ package vk.media
   */
 final case class VkVideo(
                            id: Int,
+                           owner_id: Int,
                            title: String,
                            description: String,
                            duration: Int,
@@ -33,6 +34,7 @@ object VkVideo {
 
   implicit val vkVideoReads: Reads[VkVideo] = (
     (JsPath \ "id").read[Int] and
+    (JsPath \ "owner_id").read[Int] and
     (JsPath \ "title").read[String] and
     (JsPath \ "description").read[String] and
     (JsPath \ "duration").read[Int] and
