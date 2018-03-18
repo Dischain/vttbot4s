@@ -11,10 +11,18 @@ import play.api.libs.ws.{BodyWritable, InMemoryBody}
 
 import akka.util.ByteString
 
+/**
+  * Facilitates requests to vk api
+  *
+  * @param accessToken `String` vk access token
+  * @param vkApiHost `String` host
+  * @param apiVersion `Int` api version
+  */
 final class RequestHandler(
                             accessToken: String,
                             vkApiHost: String = "api.vk.com",
-                            apiVersion: String = "5.73")
+                            apiVersion: String = "5.73"
+                          )
 {
   private[this] val apiBaseUrl = s"https://$vkApiHost/method/"
 
