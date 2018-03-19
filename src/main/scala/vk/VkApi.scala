@@ -11,7 +11,7 @@ import vk.api.{RequestHandler, WallApi}
   *       r.items forEach { item =>
   *         doSomething(item)
   *       }
-  *     case VkApiFailure => logger.log("oops!")
+  *     case VkApiFailure(msg: String) => logger.log(msg)
   *   }
   * }}}
   *

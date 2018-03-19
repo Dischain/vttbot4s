@@ -1,3 +1,3 @@
 package vk.response
 
-case object VkApiFailure extends ApiResponse
+case class VkApiFailure(message: String) extends ApiResponse
