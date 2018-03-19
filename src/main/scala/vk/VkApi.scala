@@ -17,7 +17,7 @@ import vk.api.{RequestHandler, WallApi}
   *
   * @param token `String` service token
   */
-final class VkApi(val token: String) {
+final class VkApi(val token: String, val domain: String) {
   val request = new RequestHandler(token)
 
   def wall = new WallApi(request)

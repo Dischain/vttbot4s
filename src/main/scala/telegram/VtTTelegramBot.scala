@@ -5,13 +5,12 @@ import java.net.URL
 import info.mukel.telegrambot4s.api.TelegramBot
 import info.mukel.telegrambot4s.methods.ParseMode.ParseMode
 import info.mukel.telegrambot4s.methods.{SendDocument, SendMessage, SendPhoto, SendVideo}
-import info.mukel.telegrambot4s.models.{ChatId, InputFile, Message, ReplyMarkup}
+import info.mukel.telegrambot4s.models.{InputFile, Message, ReplyMarkup}
 
 import scala.concurrent.Future
 
-final class VTTTelegramBot(val token: String) extends TelegramBot {
+final class VtTTelegramBot(val token: String, val chatId: String) extends TelegramBot {
   def sendVideo(
-                 chatId              : ChatId,
                  videoName           : String,
                  videoURL            : String,
                  duration            : Option[Int] = None,
@@ -40,7 +39,6 @@ final class VTTTelegramBot(val token: String) extends TelegramBot {
   }
 
   def sendDocument(
-                    chatId              : ChatId,
                     documentURL         : String,
                     documentName        : String,
                     caption             : Option[String] = None,
@@ -63,7 +61,6 @@ final class VTTTelegramBot(val token: String) extends TelegramBot {
   }
 
   def sendPhoto(
-                 chatId              : ChatId,
                  photoName           : String,
                  photoURL            : String,
                  caption             : Option[String] = None,
@@ -85,7 +82,6 @@ final class VTTTelegramBot(val token: String) extends TelegramBot {
   }
 
   def sendMessage(
-                   chatId                : ChatId,
                    text                  : String,
                    parseMode             : Option[ParseMode] = None,
                    disableWebPagePreview : Option[Boolean] = None,
