@@ -1,6 +1,6 @@
 package vk.api
 
-import play.api.libs.json.{JsSuccess, Json}
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import vk.methods.WallGet
 import vk.response.{ApiResponse, VkApiFailure, WallGetResponse}
 
@@ -32,7 +32,7 @@ final class WallApi(rh: RequestHandler) {
       .map { response => Json.fromJson(response) }
       .map {
       case JsSuccess(resp: WallGetResponse, _) => resp
-      case _ => VkApiFailure
+      case e: JsError => VkApiFailure(e.errors.mkString(" "))
     }
   }
 }
