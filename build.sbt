@@ -10,3 +10,5 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-ahc-ws-standalone" % "1.1.6",
   "com.typesafe.akka" %% "akka-actor" % "2.5.11"
 )
+
+mainClass := Some("Main")
