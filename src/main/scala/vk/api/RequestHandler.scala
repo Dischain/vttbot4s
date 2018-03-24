@@ -1,14 +1,14 @@
 package vk.api
 
+import akka.actor.ActorSystem
+import akka.stream.Materializer
 import vk.methods._
 import play.api.libs.json.Json.JsValueWrapper
 
 import scala.concurrent.Future
-
 import play.api.libs.ws.ahc._
 import play.api.libs.json._
 import play.api.libs.ws.{BodyWritable, InMemoryBody}
-
 import akka.util.ByteString
 
 /**
@@ -22,6 +22,9 @@ final class RequestHandler(
                             accessToken: String,
                             vkApiHost: String = "api.vk.com",
                             apiVersion: String = "5.73"
+                          ) (
+                            implicit system: ActorSystem,
+                            materializer: Materializer
                           )
 {
   private[this] val apiBaseUrl = s"https://$vkApiHost/method/"
@@ -39,30 +42,28 @@ final class RequestHandler(
     case _ => JsString(obj.toString)
   }
 
-  private[this] def fieldsToKVStringSeq(req: ApiRequest) =
+  private[this] def fieldsToKVStringSeq(req: VkApiRequest) =
     req.getClass.getDeclaredFields.map { field =>
       field.setAccessible(true)
       val name = field.getName
       val value = field.get(req)
       (camelToUnderscore(name), unwrapToString(value))
-    }.filterNot{ p =>
+    }.filterNot { p =>
       p._2 == "None" || p._1 == "method_name" || p._1 == "with_access_token"
     }.toSeq
 
-  private[this] def fieldsToKVJsonSeq(req: ApiRequest) =
+  private[this] def fieldsToKVJsonSeq(req: VkApiRequest) =
     req.getClass.getDeclaredFields.map { field =>
+      field.setAccessible(true)
       val name = field.getName
       val value = field.get(req)
       (camelToUnderscore(name), unwrapToJson(value))
-    }.filterNot{ p => p._2 == JsString("None") && p._1 == "method_name"}.toSeq
+    }.filterNot { p =>
+      p._2 == JsString("None") && p._1 == "method_name"
+    }.toSeq
 
-  def apply(req: ApiRequest): Future[JsValue] = {
-    import akka.actor.ActorSystem
-    import akka.stream.ActorMaterializer
+  def apply(req: VkApiRequest): Future[JsValue] = {
     import scala.concurrent.ExecutionContext.Implicits.global
-
-    implicit val system = ActorSystem()
-    implicit val materializer = ActorMaterializer()
 
     implicit val bw = BodyWritable[JsObject]({ obj =>
       val s = Json.stringify(obj)
@@ -81,11 +82,11 @@ final class RequestHandler(
       .addQueryStringParameters(initialQSParams: _*)
 
     req match {
-      case r: ApiRequestQS =>
+      case r: VkApiRequestQS =>
         ws.addQueryStringParameters(fieldsToKVStringSeq(r): _*)
           .get() map { response => Json.parse(response.body)}
 
-      case r: ApiRequestJson =>
+      case r: VkApiRequestJson =>
         ws.post(Json.obj(fieldsToKVJsonSeq(r): _*)) map { response =>
           Json.parse(response.body)
         }

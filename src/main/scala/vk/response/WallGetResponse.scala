@@ -8,7 +8,7 @@ import vk.basic.VkWallPost
   * @param count `Int` count
   * @param items `Seq[VkWallPost]` sequence of wall post objects
   */
-final case class WallGetResponse(count: Int, items: Seq[VkWallPost]) extends ApiResponse
+final case class WallGetResponse(count: Int, items: Seq[VkWallPost]) extends VkApiResponse
 
 object WallGetResponse {
   import play.api.libs.json._

@@ -2,7 +2,7 @@ package vk.api
 
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import vk.methods.WallGet
-import vk.response.{ApiResponse, VkApiFailure, WallGetResponse}
+import vk.response.{VkApiFailure, VkApiResponse, WallGetResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,7 +24,7 @@ final class WallApi(rh: RequestHandler) {
     */
   def get(domain: String,
           count: Option[Int] = None,
-          offset: Option[Int] = None)(implicit ec: ExecutionContext): Future[ApiResponse] =
+          offset: Option[Int] = None)(implicit ec: ExecutionContext): Future[VkApiResponse] =
   {
     implicit val vgr = WallGetResponse.wallGetRespReads
 
