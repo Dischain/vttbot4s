@@ -16,6 +16,7 @@ object VkMedia {
       case JsString("document") => VkDocument.vkDocumentReads.reads((json \ "document").get)
       case JsString("page") => VkPage.vkPageReads.reads((json \ "page").get)
       case JsString("market") => VkMarket.vkMarketReads.reads((json \ "market").get)
+      case JsString("audio") => VkAudio.vkAudioReads.reads((json \ "audio").get)
       case unsupported => JsError(s"Unsupported media type: $unsupported")
     }
 
