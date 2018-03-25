@@ -12,7 +12,7 @@ final case class WallGet(
                         domain: String,
                         count: Option[Int] = None,
                         offset: Option[Int] = None
-                        ) extends ApiRequestQS
+                        ) extends VkApiRequestQS
 {
   val methodName: String = "wall.get"
   val withAccessToken: Boolean = true

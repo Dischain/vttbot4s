@@ -1,5 +1,7 @@
 package vk
 
+import akka.actor.ActorSystem
+import akka.stream.Materializer
 import vk.api.{RequestHandler, WallApi}
 
 /**
@@ -17,7 +19,9 @@ import vk.api.{RequestHandler, WallApi}
   *
   * @param token `String` service token
   */
-final class VkApi(val token: String, val domain: String) {
+final class VkApi(val token: String, val domain: String)
+                 (implicit system: ActorSystem, materializer: Materializer)
+{
   val request = new RequestHandler(token)
 
   def wall = new WallApi(request)

@@ -1,6 +1,6 @@
 package vk.methods
 
-trait ApiRequest {
+trait VkApiRequest {
   val methodName: String
   val withAccessToken: Boolean
 }
