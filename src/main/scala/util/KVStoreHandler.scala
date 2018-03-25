@@ -15,10 +15,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class KVStoreHandler(path: String) (implicit ec: ExecutionContext) {
   def storeValue(key: String, value: Any): Future[Unit] =
     writeFile(path, s"$key $value") map {
-      case Left(FileNotFoundException) =>
+      case Left(e: FileNotFoundException) =>
         new File(path).createNewFile()
         storeValue(key, value)
-      case Left(SecurityException) =>
+      case Left(e: SecurityException) =>
         new File(path).setWritable(true)
         storeValue(key, value)
       case _ => Unit

@@ -2,19 +2,23 @@ package util
 
 import vk.basic.VkWallPost
 import vk.media.{VkDocument, VkPhoto, VkVideo}
+import AsyncFileHandler._
+
+import scala.concurrent.ExecutionContext
 
 object Utils {
-  def formPost(post: VkWallPost, domain: String): String = {
-    val previewImage = post.attachments(0) match {
-      case d: VkDocument => d.url
-      case p: VkPhoto =>
-        p.photo_604 getOrElse(p.photo_807 getOrElse(p.photo_1280 getOrElse(p.photo_130 get)))
-      case v: VkVideo => formVkUrlToVideo(domain, v.id, v.owner_id)
+  def formPost(post: VkWallPost, vkDomain: String): String = {
+    val previewImage = post.attachments.headOption match {
+      case Some(d: VkDocument) => d.url
+      case Some(p: VkPhoto) =>
+        p.photo_604 getOrElse(p.photo_807 getOrElse(p.photo_1280 getOrElse p.photo_130.get))
+      case Some(v: VkVideo) =>
+        formVkUrlToVideo(vkDomain, v.id, v.owner_id)
       case _ => ""
     }
 
     val text = post.text
-    val postUrl = formVkUrlToPost(domain, post.id, post.from_id)
+    val postUrl = formVkUrlToPost(vkDomain, post.id, post.from_id)
     s""""$text<a href="$previewImage">&#160</a>\n$postUrl""""
   }
 
