@@ -22,17 +22,21 @@ class VtTScheduler (
   kvh.readValue("id") map { value => lastVkPostId = value.getOrElse("-1").toInt }
 
   def receive: Actor.Receive = {
-    case Tick => vkActor ! LookupNewPost
+    case Tick =>
+      log.info("scheduling started")
+      vkActor ! LookupNewPost
     case PostReceived(post: VkWallPost, vkDomain: String) =>
       if (lastVkPostId != post.id) {
         telegramActor ! TelegramSendMessage(post, vkDomain)
       } else {
+        log.info(s"message ${post.id} already exists")
         schedule()
       }
     case LookupFailure => schedule()
     case UpdateLastPostId(id: Int) =>
       kvh.storeValue("id", id) map { _ =>
         lastVkPostId = id
+        log.info(s"updated lastVkPostId: $id")
         schedule()
       }
   }

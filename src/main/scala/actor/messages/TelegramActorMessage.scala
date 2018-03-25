@@ -4,4 +4,4 @@ import vk.basic.VkWallPost
 
 sealed trait TelegramActorMessage
 
-case class TelegramSendMessage(post: VkWallPost) extends TelegramActorMessage
+case class TelegramSendMessage(post: VkWallPost, vkDomain: String) extends TelegramActorMessage
