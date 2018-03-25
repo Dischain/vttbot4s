@@ -31,8 +31,8 @@ final class WallApi(rh: RequestHandler) {
     rh(WallGet(domain, count, offset))
       .map { response => Json.fromJson(response) }
       .map {
-      case JsSuccess(resp: WallGetResponse, _) => resp
-      case e: JsError => VkApiFailure(e.errors.mkString(" "))
-    }
+        case JsSuccess(resp: WallGetResponse, _) => resp
+        case e: JsError => VkApiFailure(e.errors.mkString(" "))
+      }
   }
 }

@@ -5,7 +5,7 @@ import java.net.URL
 import info.mukel.telegrambot4s.api.TelegramBot
 import info.mukel.telegrambot4s.methods.ParseMode.ParseMode
 import info.mukel.telegrambot4s.methods.{SendDocument, SendMessage, SendPhoto, SendVideo}
-import info.mukel.telegrambot4s.models.{InputFile, Message, ReplyMarkup}
+import info.mukel.telegrambot4s.models._
 
 import scala.concurrent.Future
 
@@ -55,8 +55,8 @@ final class VtTTelegramBot(val token: String, val chatId: String) extends Telegr
       InputFile(documentName, byteArr),
       caption,
       disableNotification,
-    replyToMessageId,
-    replyMarkup
+      replyToMessageId,
+      replyMarkup
     ))
   }
 

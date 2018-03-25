@@ -20,7 +20,7 @@ final case class VkWallPost(
                           created_by: Option[Int],
                           date: Int,
                           text: String,
-                          attachments: Seq[VkMedia]
+                          attachments: Option[Seq[VkMedia]]
                          )
 
 object VkWallPost {
@@ -32,6 +32,6 @@ object VkWallPost {
     createdBy <- (JsPath \ "created_by").readNullable[Int]
     date <- (JsPath \ "date").read[Int]
     text <- (JsPath \ "text").read[String]
-    attachments <- (JsPath \ "attachments").read[Seq[VkMedia]]
+    attachments <- (JsPath \ "attachments").readNullable[Seq[VkMedia]]
   } yield VkWallPost(id, fromId, createdBy, date, text, attachments)
 }
